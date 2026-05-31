@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<title>ปัญหาชีวิต</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    font-family: 'Sarabun', sans-serif;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    background-attachment: fixed;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* floating particles backdrop */
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: twinkle 4s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.3); }
+  }
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .screen { display: none; animation: fadeIn 0.5s ease-out; }
+  .screen.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* === INTRO === */
+  .intro-icon {
+    font-size: 80px;
+    text-align: center;
+    margin-bottom: 16px;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  h1.title {
+    font-family: 'Mitr', sans-serif;
+    font-size: 52px;
+    text-align: center;
+    background: linear-gradient(135deg, #fcb045, #fd1d1d, #833ab4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #b8b8d4;
+    font-size: 17px;
+    margin-bottom: 32px;
+  }
+  .intro-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 24px 22px;
+    margin-bottom: 24px;
+  }
+  .intro-card p {
+    line-height: 1.85;
+    font-size: 17px;
+    color: #e8e8f5;
+    margin-bottom: 12px;
+  }
+  .intro-card p:last-child { margin-bottom: 0; }
+  .rules {
+    background: rgba(252,176,69,0.08);
+    border: 1px solid rgba(252,176,69,0.25);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .rules h3 {
+    font-family: 'Mitr', sans-serif;
+    color: #fcb045;
+    margin-bottom: 12px;
+    font-size: 19px;
+  }
+  .rules ul {
+    list-style: none;
+  }
+  .rules li {
+    padding: 7px 0;
+    padding-left: 28px;
+    position: relative;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: #e8e8f5;
+  }
+  .rules li:before {
+    content: "✦";
+    position: absolute;
+    left: 4px;
+    top: 7px;
+    color: #fcb045;
+  }
+  .btn {
+    width: 100%;
+    padding: 18px;
+    font-family: 'Mitr', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: #fff;
+    background: linear-gradient(135deg, #fcb045 0%, #fd1d1d 100%);
+    box-shadow: 0 8px 24px rgba(253,29,29,0.35);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(253,29,29,0.5);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn.secondary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    box-shadow: 0 8px 24px rgba(102,126,234,0.35);
+  }
+
+  /* === QUESTION === */
+  .progress {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .dot {
+    width: 50px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+  }
+  .dot.active {
+    background: linear-gradient(90deg, #fcb045, #fd1d1d);
+    box-shadow: 0 0 12px rgba(252,176,69,0.6);
+  }
+  .dot.done { background: rgba(252,176,69,0.4); }
+
+  .q-label {
+    text-align: center;
+    color: #b8b8d4;
+    font-size: 15px;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .question {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .question-text {
+    font-family: 'Mitr', sans-serif;
+    font-size: 22px;
+    line-height: 1.55;
+    color: #fff;
+    font-weight: 500;
+  }
+  .options { display: flex; flex-direction: column; gap: 12px; }
+  .option {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #fff;
+    font-size: 17px;
+    text-align: left;
+    line-height: 1.45;
+  }
+  .option:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(252,176,69,0.5);
+    transform: translateX(4px);
+  }
+  .option-letter {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(252,176,69,0.2);
+    color: #fcb045;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-family: 'Mitr', sans-serif;
+    font-size: 16px;
+  }
+  .option.correct {
+    background: rgba(46,213,115,0.2);
+    border-color: #2ed573;
+    animation: pulse-green 0.6s;
+  }
+  .option.correct .option-letter {
+    background: #2ed573;
+    color: #fff;
+  }
+  .option.wrong {
+    background: rgba(255,71,87,0.15);
+    border-color: #ff4757;
+  }
+  .option.wrong .option-letter {
+    background: #ff4757;
+    color: #fff;
+  }
+  .option.disabled { pointer-events: none; opacity: 0.6; }
+  .option.disabled.correct, .option.disabled.wrong { opacity: 1; }
+  @keyframes pulse-green {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+  }
+
+  /* === FEEDBACK / TRANSITION === */
+  .feedback-icon {
+    font-size: 90px;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .feedback-title {
+    font-family: 'Mitr', sans-serif;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 18px;
+  }
+  .feedback-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .feedback-message {
+    font-size: 20px;
+    line-height: 1.7;
+    color: #fff;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  .feedback-sub {
+    font-size: 16px;
+    color: #b8b8d4;
+    line-height: 1.6;
+  }
+
+  /* === WIN === */
+  .win-icon {
+    font-size: 110px;
+    text-align: center;
+    margin-bottom: 12px;
+    animation: bounce 1.5s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1) rotate(5deg); }
+  }
+  .win-title {
+    font-family: 'Mitr', sans-serif;
+    text-align: center;
+    font-size: 44px;
+    background: linear-gradient(135deg, #ffd700, #ffa500, #ff6347);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .lesson-card {
+    background: linear-gradient(135deg, rgba(252,176,69,0.15), rgba(253,29,29,0.1));
+    border: 1px solid rgba(252,176,69,0.3);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .lesson-card p {
+    font-size: 18px;
+    line-height: 1.85;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+  .lesson-card p:last-child { margin-bottom: 0; }
+  .lesson-card strong {
+    color: #fcb045;
+    font-weight: 700;
+  }
+  .lesson-quote {
+    font-family: 'Mitr', sans-serif;
+    font-size: 22px;
+    color: #ffd700;
+    line-height: 1.6;
+    margin: 14px 0;
+    font-weight: 600;
+  }
+
+  .footer-note {
+    text-align: center;
+    color: #8888a8;
+    font-size: 13px;
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    h1.title { font-size: 40px; }
+    .question-text { font-size: 19px; }
+    .option { font-size: 16px; padding: 14px 16px; }
+    .feedback-title { font-size: 26px; }
+    .win-title { font-size: 36px; }
+    .lesson-card p { font-size: 17px; }
+    .lesson-quote { font-size: 19px; }
+    .container { padding: 20px 16px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+  <!-- ============ INTRO SCREEN ============ -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro-icon">🧩</div>
+    <h1 class="title">ปัญหาชีวิต</h1>
+    <p class="subtitle">เกมแห่งสติและการแก้ปัญหา</p>
+
+    <div class="intro-card">
+      <p>ในชีวิตของเรา ทุกคนล้วนเจอ <strong style="color:#fcb045;">"ปัญหา"</strong></p>
+      <p>บางปัญหา ดูใหญ่จนรู้สึกว่าไม่มีทางก้าวข้าม</p>
+      <p>บางปัญหา ดูยากจนแทบจะสิ้นหวัง</p>
+      <p style="margin-top:14px;">แต่... ทุกปัญหา <strong style="color:#fcb045;">ล้วนซ่อนคำตอบไว้ในตัวของมันเอง</strong></p>
+      <p>รอเพียงเรา <strong style="color:#fcb045;">หยุด... ตั้งสติ</strong></p>
+      <p>และรู้จัก <strong style="color:#fcb045;">เปิดปัญญา</strong> มองให้กว้าง</p>
+      <p style="margin-top:10px;color:#ffd700;">คำตอบจะปรากฏขึ้นเสมอ</p>
+    </div>
+
+    <div class="rules">
+      <h3>📜 กติกาการเล่น</h3>
+      <ul>
+        <li>คุณจะได้รับคำถาม <strong>3 ข้อ</strong> สุ่มจากปัญหาทั้งหมด</li>
+        <li>แต่ละข้อมีตัวเลือก <strong>5 ข้อ</strong> ถูกเพียง 1 เดียว</li>
+        <li>ตอบถูก <strong>เพียง 1 ข้อ</strong> ก็ชนะเกมแล้ว</li>
+        <li>คำถามจะยากเหมือนเป็นไปไม่ได้... แต่ปัญญาอยู่ในมือคุณเสมอ</li>
+      </ul>
+    </div>
+
+    <button class="btn" onclick="startGame()">🚀 เริ่มเล่นเลย</button>
+  </div>
+
+  <!-- ============ QUESTION SCREEN ============ -->
+  <div class="screen" id="screen-question">
+    <div class="progress" id="progress"></div>
+    <div class="q-label" id="qLabel">ข้อที่ 1 จาก 3</div>
+    <div class="question">
+      <div class="question-text" id="questionText"></div>
+    </div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <!-- ============ FEEDBACK SCREEN (between questions) ============ -->
+  <div class="screen" id="screen-feedback">
+    <div class="feedback-icon" id="feedbackIcon">💭</div>
+    <h2 class="feedback-title" id="feedbackTitle">ไม่เป็นไรนะ</h2>
+    <div class="feedback-card">
+      <p class="feedback-message" id="feedbackMessage"></p>
+      <p class="feedback-sub" id="feedbackSub"></p>
+    </div>
+    <button class="btn" id="feedbackBtn" onclick="nextQuestion()">ไปข้อต่อไป →</button>
+  </div>
+
+  <!-- ============ WIN SCREEN ============ -->
+  <div class="screen" id="screen-win">
+    <div class="win-icon">🏆</div>
+    <h2 class="win-title">คุณคือผู้ชนะ!</h2>
+    <div class="lesson-card">
+      <p>ยินดีด้วยครับ คุณตอบถูก! 🎉</p>
+      <p class="lesson-quote">"อย่ามองปัญหา<br>ว่ามันคือปัญหา<br>ทุกปัญหามีทางออก<br>เมื่อคุณมีสติ"</p>
+      <p>เพียงคุณ <strong>หยุด... ตั้งสติ</strong></p>
+      <p>และรู้จัก <strong>เปิดปัญญา</strong></p>
+      <p style="margin-top:18px;">ปัญหาทุกอย่างในชีวิตที่ผ่านมา <strong>คุณก็ผ่านมันไปได้เสมอ</strong></p>
+      <p style="font-family:'Mitr',sans-serif;font-size:22px;color:#ffd700;margin-top:10px;">✨ คุณคือผู้ชนะ ✨</p>
+    </div>
+    <button class="btn" onclick="restart()">🔄 เล่นอีกครั้ง</button>
+    <p class="footer-note">แชร์เกมนี้ให้คนที่คุณรัก<br>เพื่อเตือนใจกันว่า...ทุกปัญหามีทางออก 💛</p>
+  </div>
+
+  <!-- ============ LESSON-OUT SCREEN (all 3 wrong) ============ -->
+  <div class="screen" id="screen-lesson">
+    <div class="feedback-icon">🌅</div>
+    <h2 class="feedback-title" style="color:#fcb045;">บทเรียนแห่งชีวิต</h2>
+    <div class="lesson-card">
+      <p>ครั้งนี้คุณอาจยังไม่ได้คำตอบ...</p>
+      <p>แต่จำไว้เสมอว่า...</p>
+      <p class="lesson-quote">"อย่ามองปัญหา<br>ว่ามันคือปัญหา<br>ทุกปัญหามีทางออก<br>เมื่อคุณมีสติ"</p>
+      <p>ปัญหาที่ดูยาก เพียงคุณ <strong>หยุด... ตั้งสติ</strong></p>
+      <p>และ <strong>เปิดปัญญา</strong> ให้กว้าง</p>
+      <p>ความรู้ทั้งโลก อยู่ในมือคุณเสมอ</p>
+      <p style="color:#b8b8d4;font-size:15px;">(Google, AI, หนังสือ, ผู้รู้รอบตัว)</p>
+      <p style="margin-top:18px;">คำตอบจะปรากฏขึ้นเสมอ</p>
+      <p style="font-family:'Mitr',sans-serif;font-size:20px;color:#ffd700;margin-top:14px;">🙏 ทุกคนคือผู้ชนะในแบบของตัวเอง</p>
+    </div>
+    <button class="btn" onclick="restart()">🔄 เล่นใหม่อีกครั้ง</button>
+  </div>
+
+</div>
+
+<script>
+// ===== สร้างดาวพื้นหลัง =====
+(function makeStars(){
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    s.style.animationDuration = (3 + Math.random() * 3) + 's';
+    container.appendChild(s);
+  }
+})();
+
+// ===== คลังคำถามทั้งหมด 10 ข้อ (ยากระดับที่คนทั่วไปต้องอาศัยปัญญาภายนอก) =====
+const QUESTION_BANK = [
+  {
+    q: "ธาตุที่มีเลขอะตอม (Atomic Number) 79 ในตารางธาตุคือธาตุใด?",
+    opts: ["เหล็ก (Fe)", "ทองคำ (Au)", "เงิน (Ag)", "ปรอท (Hg)", "ทองแดง (Cu)"],
+    correct: 1
+  },
+  {
+    q: "ดาวฤกษ์ที่อยู่ใกล้ระบบสุริยะของเรามากที่สุด (นอกจากดวงอาทิตย์) ชื่ออะไร?",
+    opts: ["ซิริอุส (Sirius)", "แอลฟา เซนเทารี เอ", "บาร์นาร์ดสตาร์", "พร็อกซิมา เซนทอรี (Proxima Centauri)", "ดาวเหนือ (Polaris)"],
+    correct: 3
+  },
+  {
+    q: "เมืองหลวงของประเทศ Burkina Faso ในแอฟริกาตะวันตก ชื่ออะไร?",
+    opts: ["ดาการ์ (Dakar)", "อักกรา (Accra)", "วากาดูกู (Ouagadougou)", "บามาโก (Bamako)", "ไนโรบี (Nairobi)"],
+    correct: 2
+  },
+  {
+    q: "ชื่อทางวิทยาศาสตร์ของต้น \"ฟ้าทะลายโจร\" คืออะไร?",
+    opts: ["Curcuma longa", "Andrographis paniculata", "Centella asiatica", "Ocimum sanctum", "Moringa oleifera"],
+    correct: 1
+  },
+  {
+    q: "โปรตีนชนิดใดพบมากที่สุดในร่างกายมนุษย์ (ประมาณ 30% ของโปรตีนทั้งหมด)?",
+    opts: ["ฮีโมโกลบิน (Hemoglobin)", "อัลบูมิน (Albumin)", "อินซูลิน (Insulin)", "คอลลาเจน (Collagen)", "เคอราติน (Keratin)"],
+    correct: 3
+  },
+  {
+    q: "ใครเป็นผู้ค้นพบหมู่เลือดในระบบ ABO เป็นคนแรก (ได้รับโนเบลปี 1930)?",
+    opts: ["หลุยส์ ปาสเตอร์", "อเล็กซานเดอร์ เฟลมมิ่ง", "คาร์ล ลันด์สไตเนอร์ (Karl Landsteiner)", "โรเบิร์ต คอช", "เจมส์ วัตสัน"],
+    correct: 2
+  },
+  {
+    q: "โรคใดที่องค์การอนามัยโลก (WHO) ประกาศว่าถูกกำจัดออกจากโลกได้สำเร็จอย่างเป็นทางการ (ปี ค.ศ. 1980)?",
+    opts: ["โรคโปลิโอ", "โรคไข้ทรพิษ (ฝีดาษ/Smallpox)", "โรคหัด", "โรคไข้เหลือง", "โรควัณโรค"],
+    correct: 1
+  },
+  {
+    q: "ค่าคงที่ของพลังก์ (Planck Constant, h) มีค่าประมาณเท่าใด (หน่วย J·s)?",
+    opts: ["9.81 × 10⁻³⁴", "6.626 × 10⁻³⁴", "3.14 × 10⁻²³", "1.602 × 10⁻¹⁹", "2.998 × 10⁸"],
+    correct: 1
+  },
+  {
+    q: "ภาษาเขียนภาษาใดมีจำนวนตัวอักษรในระบบ Alphabet มากที่สุดในโลก (ตามบันทึก Guinness)?",
+    opts: ["ภาษาจีนกลาง", "ภาษาทมิฬ", "ภาษาเขมร (74 ตัว)", "ภาษาเกาหลี", "ภาษาญี่ปุ่น"],
+    correct: 2
+  },
+  {
+    q: "เทือกเขาที่ยาวที่สุดในโลก (เมื่อรวมส่วนที่อยู่ใต้มหาสมุทร) คือเทือกเขาใด?",
+    opts: ["เทือกเขาแอนดีส", "เทือกเขาหิมาลัย", "เทือกเขาร็อกกี", "แนวสันเขากลางมหาสมุทร (Mid-Ocean Ridge)", "เทือกเขาเทียนซาน"],
+    correct: 3
+  }
+];
+
+// ===== ตัวแปรเกม =====
+let selectedQuestions = [];
+let currentIndex = 0;
+let hasWon = false;
+
+// ===== ฟังก์ชันสุ่ม =====
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ===== เริ่มเกม =====
+function startGame() {
+  selectedQuestions = shuffle(QUESTION_BANK).slice(0, 3);
+  currentIndex = 0;
+  hasWon = false;
+  showQuestion();
+}
+
+// ===== แสดงคำถาม =====
+function showQuestion() {
+  switchScreen('screen-question');
+
+  // อัปเดต progress
+  const progress = document.getElementById('progress');
+  progress.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    if (i === currentIndex) d.classList.add('active');
+    else if (i < currentIndex) d.classList.add('done');
+    progress.appendChild(d);
+  }
+
+  document.getElementById('qLabel').textContent = `ข้อที่ ${currentIndex + 1} จาก 3`;
+
+  const q = selectedQuestions[currentIndex];
+  document.getElementById('questionText').textContent = q.q;
+
+  const optsBox = document.getElementById('options');
+  optsBox.innerHTML = '';
+  const letters = ['ก', 'ข', 'ค', 'ง', 'จ'];
+  q.opts.forEach((text, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'option';
+    btn.innerHTML = `<div class="option-letter">${letters[i]}</div><div>${text}</div>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    optsBox.appendChild(btn);
+  });
+}
+
+// ===== ตอบคำถาม =====
+function selectAnswer(chosenIdx, btnEl) {
+  const q = selectedQuestions[currentIndex];
+  const allOpts = document.querySelectorAll('.option');
+  allOpts.forEach(o => o.classList.add('disabled'));
+
+  if (chosenIdx === q.correct) {
+    btnEl.classList.add('correct');
+    hasWon = true;
+    setTimeout(() => showWin(), 1100);
+  } else {
+    btnEl.classList.add('wrong');
+    allOpts[q.correct].classList.add('correct');
+    setTimeout(() => showFeedback(), 1500);
+  }
+}
+
+// ===== แสดงข้อความให้กำลังใจระหว่างข้อ =====
+function showFeedback() {
+  // ถ้านี่คือข้อสุดท้าย (ข้อ 3) และตอบผิด → ไปหน้าบทเรียน
+  if (currentIndex >= 2) {
+    switchScreen('screen-lesson');
+    return;
+  }
+
+  const icon = document.getElementById('feedbackIcon');
+  const title = document.getElementById('feedbackTitle');
+  const msg = document.getElementById('feedbackMessage');
+  const sub = document.getElementById('feedbackSub');
+  const btn = document.getElementById('feedbackBtn');
+
+  if (currentIndex === 0) {
+    // หลังตอบผิดข้อ 1
+    icon.textContent = '🧘';
+    title.textContent = 'ไม่เป็นไรนะ';
+    title.style.color = '#fcb045';
+    msg.textContent = '"ตั้งสติ คิดให้ดี"';
+    sub.textContent = 'หายใจลึกๆ แล้วลองพยายามในข้อต่อไป คุณยังมีโอกาส 💪';
+    btn.textContent = 'ตั้งสติแล้ว ไปข้อ 2 →';
+  } else if (currentIndex === 1) {
+    // หลังตอบผิดข้อ 2
+    icon.textContent = '💡';
+    title.textContent = 'อย่ายอมแพ้';
+    title.style.color = '#fcb045';
+    msg.textContent = '"ปัญหามีทางแก้ มีหลายวิธีในการหาคำตอบ"';
+    sub.textContent = 'เปิดปัญญาให้กว้าง... ความรู้ทั้งโลกอยู่ในมือคุณ — Google, AI พร้อมจะพาคำตอบมาให้ ✨';
+    btn.textContent = 'เปิดปัญญา ไปข้อ 3 →';
+  }
+
+  switchScreen('screen-feedback');
+}
+
+// ===== ไปคำถามต่อไป =====
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex >= 3) {
+    if (hasWon) showWin();
+    else switchScreen('screen-lesson');
+  } else {
+    showQuestion();
+  }
+}
+
+// ===== ชนะ =====
+function showWin() {
+  switchScreen('screen-win');
+}
+
+// ===== เริ่มใหม่ =====
+function restart() {
+  startGame();
+}
+
+// ===== สลับหน้าจอ =====
+function switchScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
