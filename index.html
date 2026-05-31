@@ -171,6 +171,24 @@
     box-shadow: 0 0 12px rgba(252,176,69,0.6);
   }
   .dot.done { background: rgba(252,176,69,0.4); }
+  .dot.done.correct { background: rgba(46,213,115,0.55); box-shadow: 0 0 8px rgba(46,213,115,0.4); }
+  .dot.done.wrong { background: rgba(255,71,87,0.45); }
+
+  /* score line on feedback screen */
+  .score-line {
+    text-align: center;
+    font-family: 'Mitr', sans-serif;
+    font-size: 18px;
+    color: #fcb045;
+    margin-bottom: 14px;
+    padding: 10px 18px;
+    background: rgba(252,176,69,0.08);
+    border: 1px solid rgba(252,176,69,0.25);
+    border-radius: 12px;
+    display: inline-block;
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
 
   .q-label {
     text-align: center;
@@ -373,12 +391,11 @@
 
     <div class="intro-card">
       <p>ในชีวิตของเรา ทุกคนล้วนเจอ <strong style="color:#fcb045;">"ปัญหา"</strong></p>
-      <p>บางปัญหา ดูใหญ่จนรู้สึกว่าไม่มีทางก้าวข้าม</p>
+      <p>บางปัญหา ดูใหญ่จนเหมือนไม่มีทาง</p>
       <p>บางปัญหา ดูยากจนแทบจะสิ้นหวัง</p>
-      <p style="margin-top:14px;">แต่... ทุกปัญหา <strong style="color:#fcb045;">ล้วนซ่อนคำตอบไว้ในตัวของมันเอง</strong></p>
-      <p>รอเพียงเรา <strong style="color:#fcb045;">หยุด... ตั้งสติ</strong></p>
-      <p>และรู้จัก <strong style="color:#fcb045;">เปิดปัญญา</strong> มองให้กว้าง</p>
-      <p style="margin-top:10px;color:#ffd700;">คำตอบจะปรากฏขึ้นเสมอ</p>
+      <p style="margin-top:14px;">แต่... ทุกปัญหา <strong style="color:#fcb045;">ล้วนซ่อนคำตอบไว้ในตัวมันเอง</strong></p>
+      <p>ขอเพียงคุณ <strong style="color:#fcb045;">หยุด... ตั้งสติ</strong></p>
+      <p style="margin-top:10px;color:#ffd700;">เมื่อใจสงบ คุณจะมองเห็นทางออกเอง</p>
     </div>
 
     <div class="rules">
@@ -386,8 +403,8 @@
       <ul>
         <li>คุณจะได้รับคำถาม <strong>3 ข้อ</strong> สุ่มจากปัญหาทั้งหมด</li>
         <li>แต่ละข้อมีตัวเลือก <strong>5 ข้อ</strong> ถูกเพียง 1 เดียว</li>
-        <li>ตอบถูก <strong>เพียง 1 ข้อ</strong> ก็ชนะเกมแล้ว</li>
-        <li>คำถามจะยากเหมือนเป็นไปไม่ได้... แต่ปัญญาอยู่ในมือคุณเสมอ</li>
+        <li>ตอบถูก <strong>2 ข้อ จาก 3 ข้อ</strong> ก็ชนะเกม</li>
+        <li>คำถามจะดูยากเหมือนเป็นไปไม่ได้... แต่สติจะนำคุณไปสู่คำตอบ</li>
       </ul>
     </div>
 
@@ -406,6 +423,7 @@
 
   <!-- ============ FEEDBACK SCREEN (between questions) ============ -->
   <div class="screen" id="screen-feedback">
+    <div style="text-align:center;"><div class="score-line" id="scoreLine"></div></div>
     <div class="feedback-icon" id="feedbackIcon">💭</div>
     <h2 class="feedback-title" id="feedbackTitle">ไม่เป็นไรนะ</h2>
     <div class="feedback-card">
@@ -420,12 +438,15 @@
     <div class="win-icon">🏆</div>
     <h2 class="win-title">คุณคือผู้ชนะ!</h2>
     <div class="lesson-card">
-      <p>ยินดีด้วยครับ คุณตอบถูก! 🎉</p>
-      <p class="lesson-quote">"อย่ามองปัญหา<br>ว่ามันคือปัญหา<br>ทุกปัญหามีทางออก<br>เมื่อคุณมีสติ"</p>
-      <p>เพียงคุณ <strong>หยุด... ตั้งสติ</strong></p>
-      <p>และรู้จัก <strong>เปิดปัญญา</strong></p>
-      <p style="margin-top:18px;">ปัญหาทุกอย่างในชีวิตที่ผ่านมา <strong>คุณก็ผ่านมันไปได้เสมอ</strong></p>
-      <p style="font-family:'Mitr',sans-serif;font-size:22px;color:#ffd700;margin-top:10px;">✨ คุณคือผู้ชนะ ✨</p>
+      <p>ยินดีด้วยครับ! 🎉</p>
+      <p style="color:#fcb045;font-weight:600;">เห็นไหม... เมื่อคุณ <strong>ตั้งสติ</strong></p>
+      <p style="color:#fcb045;font-weight:600;">คุณก็ <strong>พบคำตอบเสมอ</strong></p>
+      <p class="lesson-quote">"อย่ามองปัญหา<br>ว่ามันคือปัญหา<br>ทุกปัญหามีคำตอบ<br>เมื่อคุณมีสติ"</p>
+      <p>เหมือนคำถามในเกมนี้ — ตอนแรกคุณคิดว่าตอบไม่ได้</p>
+      <p>แต่พอ <strong>ตั้งสติ</strong> คุณก็คิดออกเองว่า...</p>
+      <p>มีหลายทางช่วยคุณ (Google, AI, ความรู้รอบตัว)</p>
+      <p style="margin-top:18px;">ในชีวิตจริงก็เช่นกัน — ทุกปัญหา <strong>คุณก็ผ่านมันไปได้เสมอ</strong></p>
+      <p style="font-family:'Mitr',sans-serif;font-size:22px;color:#ffd700;margin-top:10px;">✨ สติช่วยคุณได้ ✨</p>
     </div>
     <button class="btn" onclick="restart()">🔄 เล่นอีกครั้ง</button>
     <p class="footer-note">แชร์เกมนี้ให้คนที่คุณรัก<br>เพื่อเตือนใจกันว่า...ทุกปัญหามีทางออก 💛</p>
@@ -436,15 +457,16 @@
     <div class="feedback-icon">🌅</div>
     <h2 class="feedback-title" style="color:#fcb045;">บทเรียนแห่งชีวิต</h2>
     <div class="lesson-card">
-      <p>ครั้งนี้คุณอาจยังไม่ได้คำตอบ...</p>
-      <p>แต่จำไว้เสมอว่า...</p>
-      <p class="lesson-quote">"อย่ามองปัญหา<br>ว่ามันคือปัญหา<br>ทุกปัญหามีทางออก<br>เมื่อคุณมีสติ"</p>
-      <p>ปัญหาที่ดูยาก เพียงคุณ <strong>หยุด... ตั้งสติ</strong></p>
-      <p>และ <strong>เปิดปัญญา</strong> ให้กว้าง</p>
-      <p>ความรู้ทั้งโลก อยู่ในมือคุณเสมอ</p>
-      <p style="color:#b8b8d4;font-size:15px;">(Google, AI, หนังสือ, ผู้รู้รอบตัว)</p>
-      <p style="margin-top:18px;">คำตอบจะปรากฏขึ้นเสมอ</p>
-      <p style="font-family:'Mitr',sans-serif;font-size:20px;color:#ffd700;margin-top:14px;">🙏 ทุกคนคือผู้ชนะในแบบของตัวเอง</p>
+      <p>ครั้งนี้คุณอาจยังไม่ได้คำตอบครบ...</p>
+      <p>แต่สิ่งสำคัญคือบทเรียนนี้ —</p>
+      <p class="lesson-quote">"อย่ามองปัญหา<br>ว่ามันคือปัญหา<br>ทุกปัญหามีคำตอบ<br>เมื่อคุณมีสติ"</p>
+      <p>เหมือนเห็นคำถามครั้งแรก คุณรู้สึกว่า <strong>ตอบไม่ได้แน่</strong></p>
+      <p>แต่ถ้าคุณ <strong>ตั้งสติ</strong> สักครู่...</p>
+      <p>คุณจะคิดออกเองว่า — ลองถาม Google หรือ AI ก็ได้นี่</p>
+      <p>แล้วคำตอบก็ปรากฏขึ้น</p>
+      <p style="margin-top:18px;color:#fcb045;font-weight:600;">นี่คือสิ่งที่เกมต้องการบอก —</p>
+      <p style="color:#fcb045;font-weight:600;">ทุกปัญหามีคำตอบเสมอ</p>
+      <p style="font-family:'Mitr',sans-serif;font-size:22px;color:#ffd700;margin-top:14px;">🙏 สติช่วยคุณได้ 🙏</p>
     </div>
     <button class="btn" onclick="restart()">🔄 เล่นใหม่อีกครั้ง</button>
   </div>
@@ -526,7 +548,10 @@ const QUESTION_BANK = [
 // ===== ตัวแปรเกม =====
 let selectedQuestions = [];
 let currentIndex = 0;
-let hasWon = false;
+let correctCount = 0;
+let seenIndices = [];   // คำถามที่เคยถูกสุ่มมาแล้ว (เพื่อไม่ให้ซ้ำ)
+let answerHistory = []; // [true/false, ...] ผลการตอบของรอบปัจจุบัน
+const WIN_THRESHOLD = 2; // ตอบถูก 2 จาก 3 ข้อ = ชนะ
 
 // ===== ฟังก์ชันสุ่ม =====
 function shuffle(arr) {
@@ -540,9 +565,19 @@ function shuffle(arr) {
 
 // ===== เริ่มเกม =====
 function startGame() {
-  selectedQuestions = shuffle(QUESTION_BANK).slice(0, 3);
+  // สุ่มจากคำถามที่ยังไม่เคยเห็น — ถ้าเหลือ < 3 ให้รีเซ็ต (วนใหม่)
+  let availableIndices = QUESTION_BANK.map((_, i) => i).filter(i => !seenIndices.includes(i));
+  if (availableIndices.length < 3) {
+    seenIndices = [];
+    availableIndices = QUESTION_BANK.map((_, i) => i);
+  }
+  const pickedIndices = shuffle(availableIndices).slice(0, 3);
+  selectedQuestions = pickedIndices.map(i => QUESTION_BANK[i]);
+  seenIndices = [...seenIndices, ...pickedIndices];
+
   currentIndex = 0;
-  hasWon = false;
+  correctCount = 0;
+  answerHistory = [];
   showQuestion();
 }
 
@@ -550,14 +585,19 @@ function startGame() {
 function showQuestion() {
   switchScreen('screen-question');
 
-  // อัปเดต progress
+  // อัปเดต progress — แต่ละจุดบอกผลของข้อนั้นๆ (ถูก/ผิด/กำลังทำ/ยังไม่ถึง)
   const progress = document.getElementById('progress');
   progress.innerHTML = '';
   for (let i = 0; i < 3; i++) {
     const d = document.createElement('div');
     d.className = 'dot';
-    if (i === currentIndex) d.classList.add('active');
-    else if (i < currentIndex) d.classList.add('done');
+    if (i === currentIndex) {
+      d.classList.add('active');
+    } else if (i < currentIndex) {
+      d.classList.add('done');
+      if (answerHistory[i] === true) d.classList.add('correct');
+      else if (answerHistory[i] === false) d.classList.add('wrong');
+    }
     progress.appendChild(d);
   }
 
@@ -584,47 +624,90 @@ function selectAnswer(chosenIdx, btnEl) {
   const allOpts = document.querySelectorAll('.option');
   allOpts.forEach(o => o.classList.add('disabled'));
 
-  if (chosenIdx === q.correct) {
+  const isCorrect = chosenIdx === q.correct;
+  answerHistory.push(isCorrect);
+  if (isCorrect) {
+    correctCount++;
     btnEl.classList.add('correct');
-    hasWon = true;
-    setTimeout(() => showWin(), 1100);
   } else {
     btnEl.classList.add('wrong');
     allOpts[q.correct].classList.add('correct');
-    setTimeout(() => showFeedback(), 1500);
   }
+
+  // รอให้ผู้เล่นเห็นผลก่อนเปลี่ยนหน้า
+  const delay = isCorrect ? 1100 : 1500;
+  setTimeout(() => {
+    if (currentIndex >= 2) {
+      // ข้อสุดท้ายแล้ว — ตัดสินใจ ชนะ/บทเรียน
+      if (correctCount >= WIN_THRESHOLD) showWin();
+      else switchScreen('screen-lesson');
+    } else {
+      // ระหว่างข้อ — แสดง feedback (ทั้งกรณีถูกและผิด)
+      showFeedback(isCorrect);
+    }
+  }, delay);
 }
 
 // ===== แสดงข้อความให้กำลังใจระหว่างข้อ =====
-function showFeedback() {
-  // ถ้านี่คือข้อสุดท้าย (ข้อ 3) และตอบผิด → ไปหน้าบทเรียน
-  if (currentIndex >= 2) {
-    switchScreen('screen-lesson');
-    return;
-  }
-
+function showFeedback(isCorrect) {
+  const scoreLine = document.getElementById('scoreLine');
   const icon = document.getElementById('feedbackIcon');
   const title = document.getElementById('feedbackTitle');
   const msg = document.getElementById('feedbackMessage');
   const sub = document.getElementById('feedbackSub');
   const btn = document.getElementById('feedbackBtn');
 
+  const answered = currentIndex + 1; // ตอบไปแล้วกี่ข้อ
+  const remaining = 3 - answered;    // เหลืออีกกี่ข้อ
+  const needToWin = Math.max(0, WIN_THRESHOLD - correctCount); // ต้องถูกอีกกี่ข้อจึงชนะ
+
+  // score line — บอกชัดเจนว่า "นี่คือความคืบหน้า ไม่ใช่จบเกม"
+  scoreLine.textContent = `ความคืบหน้า: ${answered}/3 ข้อ • ตอบถูก ${correctCount} ข้อ`;
+
   if (currentIndex === 0) {
-    // หลังตอบผิดข้อ 1
-    icon.textContent = '🧘';
-    title.textContent = 'ไม่เป็นไรนะ';
-    title.style.color = '#fcb045';
-    msg.textContent = '"ตั้งสติ คิดให้ดี"';
-    sub.textContent = 'หายใจลึกๆ แล้วลองพยายามในข้อต่อไป คุณยังมีโอกาส 💪';
-    btn.textContent = 'ตั้งสติแล้ว ไปข้อ 2 →';
+    // ============ หลังข้อ 1 ============
+    if (isCorrect) {
+      // ทำให้ดู "ก้าวหน้า" ไม่ใช่ "ชนะ" — ใช้สีส้ม (สีของเกม) ไม่ใช่เขียว
+      icon.textContent = '🌱';
+      title.textContent = 'ก้าวแรกผ่าน';
+      title.style.color = '#fcb045';
+      msg.textContent = '"พอตั้งสติ คำตอบก็มาเอง"';
+      sub.textContent = `ยังเหลืออีก 2 ข้อ — ต้องถูกอีก ${needToWin} ข้อจึงจะชนะ 💪`;
+      btn.textContent = 'ไปข้อ 2 →';
+    } else {
+      icon.textContent = '🧘';
+      title.textContent = 'ตั้งสติให้ดี';
+      title.style.color = '#fcb045';
+      msg.textContent = '"หยุด... และตั้งสติ"';
+      sub.textContent = `ยังเหลือ 2 ข้อ — ต้องถูก ${needToWin} ข้อจาก 2 ข้อที่เหลือ`;
+      btn.textContent = 'ตั้งสติแล้ว ไปข้อ 2 →';
+    }
   } else if (currentIndex === 1) {
-    // หลังตอบผิดข้อ 2
-    icon.textContent = '💡';
-    title.textContent = 'อย่ายอมแพ้';
-    title.style.color = '#fcb045';
-    msg.textContent = '"ปัญหามีทางแก้ มีหลายวิธีในการหาคำตอบ"';
-    sub.textContent = 'เปิดปัญญาให้กว้าง... ความรู้ทั้งโลกอยู่ในมือคุณ — Google, AI พร้อมจะพาคำตอบมาให้ ✨';
-    btn.textContent = 'เปิดปัญญา ไปข้อ 3 →';
+    // ============ หลังข้อ 2 ============
+    if (isCorrect && correctCount >= WIN_THRESHOLD) {
+      // ตอบถูก 2 ข้อแล้ว — ชนะแน่นอน แต่ยังเหลือข้อ 3
+      icon.textContent = '⭐';
+      title.textContent = 'ถึงเป้าหมายแล้ว!';
+      title.style.color = '#ffd700';
+      msg.textContent = '"สติ คือกุญแจสู่คำตอบ"';
+      sub.textContent = 'ตอบถูก 2 ข้อแล้ว — ชนะแน่นอน! ลองข้อสุดท้ายเพื่อความครบเครื่อง ✨';
+      btn.textContent = 'ไปข้อ 3 →';
+    } else if (isCorrect) {
+      // ถูกแค่ 1 ข้อ (ผิดข้อ 1, ถูกข้อ 2) — ยังต้องถูกข้อ 3
+      icon.textContent = '✨';
+      title.textContent = 'ใกล้แล้ว!';
+      title.style.color = '#fcb045';
+      msg.textContent = '"สติ คือกุญแจสู่คำตอบ"';
+      sub.textContent = `อีก 1 ข้อ ตอบถูกก็ชนะเกม — ต้องถูก ${needToWin} ข้อจากข้อสุดท้าย ✨`;
+      btn.textContent = 'ไปข้อ 3 →';
+    } else {
+      icon.textContent = '💡';
+      title.textContent = 'อย่ายอมแพ้';
+      title.style.color = '#fcb045';
+      msg.textContent = '"ปัญหามีคำตอบเสมอ"';
+      sub.textContent = 'พอตั้งสติ คุณจะคิดออกเองว่ามีหลายทาง — Google, AI ก็อยู่ในมือคุณ ✨';
+      btn.textContent = 'ตั้งสติ ไปข้อ 3 →';
+    }
   }
 
   switchScreen('screen-feedback');
@@ -634,7 +717,7 @@ function showFeedback() {
 function nextQuestion() {
   currentIndex++;
   if (currentIndex >= 3) {
-    if (hasWon) showWin();
+    if (correctCount >= WIN_THRESHOLD) showWin();
     else switchScreen('screen-lesson');
   } else {
     showQuestion();
